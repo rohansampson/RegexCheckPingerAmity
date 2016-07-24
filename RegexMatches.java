@@ -232,19 +232,18 @@ public class RegexMatches
             throw new TimeNotFoundException();
     }
 
-    // Does't work
-    // No error but all values null
-    public static String[] parsePingStatisticsMinAvgMaxMdev(String input) throws TimeNotFoundException {
+    // Works!
+    public static List<String> parsePingStatisticsMinAvgMaxMdev(String input) throws TimeNotFoundException {
         // Capture the rtt min/avg/max/mdev times
         Pattern p = Pattern.compile("rtt\\s+min\\/avg\\/max\\/mdev\\s+=\\s+([0-9]+\\.[0-9]+)\\/([0-9]+\\.[0-9]+)\\/([0-9]+\\.[0-9]+)\\/([0-9]+\\.[0-9]+)\\s+ms");
         Matcher m = p.matcher(input);
         if (m.find()){
             int i = 0;
-            String[] s = new  String[4];
+            List<String> list = new LinkedList<>();
             while(m.find()){
-                s[i] = m.group(++i);
+                list.add(m.group(1));
             }
-            return s;
+            return list;
         }
         else
             throw new TimeNotFoundException();
