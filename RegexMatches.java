@@ -1,20 +1,22 @@
+import exceptions.*;
+
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegexMatches
 {
     public static void main( String args[] ){
-        String input = "[1463895254]PING www.andi.dz (213.179.181.44) 100(128) bytes of data.[1463895254]108 bytes from 213.179.181.44: icmp_seq=1 ttl=54 time=195 ms[1463895255]108 bytes from 213.179.181.44: icmp_seq=2 ttl=54 time=202 ms[1463895256]108 bytes from 213.179.181.44: icmp_seq=3 ttl=54 time=180 ms[1463895257]108 bytes from 213.179.181.44: icmp_seq=4 ttl=54 time=200 ms[1463895258]108 bytes from 213.179.181.44: icmp_seq=5 ttl=54 time=206 ms[1463895259]108 bytes from 213.179.181.44: icmp_seq=6 ttl=54 time=188 ms[1463895260]108 bytes from 213.179.181.44: icmp_seq=7 ttl=54 time=182 ms[1463895261]108 bytes from 213.179.181.44: icmp_seq=8 ttl=54 time=223 ms\n" +
-                "[1463895263]108 bytes from 213.179.181.44: icmp_seq=10 ttl=54 time=199 ms";
-        String input2 =
-                "[1463895327]PING www.gov.bw (168.167.134.24) 100(128) bytes of data.[1463895327]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=1 ttl=110 time=868 ms[1463895328]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=2 ttl=110 time=892 ms[1463895329]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=3 ttl=110 time=814 ms[1463895330]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=4 ttl=110 time=1009 ms[1463895331]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=5 ttl=110 time=1006 ms[1463895332]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=6 ttl=110 time=984 ms[1463895333]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=7 ttl=110 time=1004 ms[1463895334]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=8 ttl=110 time=1006 ms[1463895335]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=9 ttl=110 time=1013 ms[1463895336]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=10 ttl=110 time=578 ms[1463895336][1463895336]--- www.gov.bw ping statistics ---[1463895336]10 packets transmitted, 10 received, 0% packet loss, time 9007ms[1463895336]rtt min/avg/max/mdev = 578.263/917.875/1013.707/132.095 ms, pipe 2\n";
+        String input = "[1463895254]PING www.andi.dz (213.179.181.44) 100(128) bytes of data.[1463895254]108 bytes from 213.179.181.44: icmp_seq=1 ttl=54 time=195 ms[1463895255]108 bytes from 213.179.181.44: icmp_seq=2 ttl=54 time=202 ms[1463895256]108 bytes from 213.179.181.44: icmp_seq=3 ttl=54 time=180 ms[1463895257]108 bytes from 213.179.181.44: icmp_seq=4 ttl=54 time=200 ms[1463895258]108 bytes from 213.179.181.44: icmp_seq=5 ttl=54 time=206 ms[1463895259]108 bytes from 213.179.181.44: icmp_seq=6 ttl=54 time=188 ms[1463895260]108 bytes from 213.179.181.44: icmp_seq=7 ttl=54 time=182 ms[1463895261]108 bytes from 213.179.181.44: icmp_seq=8 ttl=54 time=223 ms[1463895263]108 bytes from 213.179.181.44: icmp_seq=9 ttl=54 time=187 ms[1463895263]108 bytes from 213.179.181.44: icmp_seq=10 ttl=54 time=199 ms";
+        String input2 = "[1463895327]PING www.gov.bw (168.167.134.24) 100(128) bytes of data.[1463895327]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=1 ttl=110 time=868 ms[1463895328]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=2 ttl=110 time=892 ms[1463895329]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=3 ttl=110 time=814 ms[1463895330]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=4 ttl=110 time=1009 ms[1463895331]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=5 ttl=110 time=1006 ms[1463895332]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=6 ttl=110 time=984 ms[1463895333]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=7 ttl=110 time=1004 ms[1463895334]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=8 ttl=110 time=1006 ms[1463895335]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=9 ttl=110 time=1013 ms[1463895336]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=10 ttl=110 time=578 ms[1463895336][1463895336]--- www.gov.bw ping statistics ---[1463895336]10 packets transmitted, 10 received, 0% packet loss, time 9007ms[1463895336]rtt min/avg/max/mdev = 578.263/917.875/1013.707/132.095 ms, pipe 2\n";
 //        System.out.println(parse1(input));
         try{
-            String op[] = parsePingStatisticsMinAvgMaxMdev(input2);
-            System.out.println(op[3]);
+            List<String> op  = parseIndividualTime(input);
+            op.forEach(System.out::println);
         }
-        catch (RMException e){
-            e.printMessage();
+        catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -65,102 +67,102 @@ public class RegexMatches
     public static String[] parseGroupBytes(String input) throws BytesNotFoundException {
         //  Capture the bytes after (ip-address) outside the parenthesis
         //  Capture the bytes after (ip-address) inside the parenthesis
-        Pattern p1 = Pattern.compile("\\)\\s+(\\d+)\\(");
+        Pattern p1 = Pattern.compile("^.*\\)\\s+(\\d+)\\(.*$");
         Matcher m1 = p1.matcher(input);
-        Pattern p2 = Pattern.compile("\\((\\d+)\\)\\s+bytes");
+        Pattern p2 = Pattern.compile("^.*\\((\\d+)\\)\\s+bytes.*$");
         Matcher m2 = p2.matcher(input);
         String[] GroupBytes = new String[2];
         int x = m1.groupCount();
         int y = m2.groupCount();
-        if(m1.find() || m2.find()){
+        if(m1.matches() && m2.matches()){
             GroupBytes[0] = m1.group(1);
             GroupBytes[1] = m2.group(1);
-            return GroupBytes;
+              return GroupBytes;
         }
         else
             throw new BytesNotFoundException();
     }
 
-    // Doesn't Work...
-    public static String[] parseIndividualTimestamp(String input) throws TimeStampNotFoundException {
+    // Works!
+    public static List<String> parseIndividualTimestamp(String input) throws TimeStampNotFoundException {
         // Capture the [unix-timestamp] before 'x byes from'
-        Pattern p = Pattern.compile("\\[([0-9]{10})\\][\\d]+\\s+bytes");
+        Pattern p = Pattern.compile("ms\\[([0-9]{10})\\][\\d]+\\s+bytes");
         Matcher m = p.matcher(input);
         if (m.find()){
-            int i = 1;
-            String[] s = new  String[10];
+            int i = 0;
+            List<String> list = new LinkedList<>();
             while(m.find()){
-                s[i] = m.group(i++);
+                list.add(m.group(1));
             }
-            return s;
+            return list;
         }
         else
             throw new TimeStampNotFoundException();
     }
 
-    // Doesn't Work...
-    public static String[] parseIndividualIP(String input) throws IPAddressNotFoundException {
+    // Works!
+    public static List<String> parseIndividualIP(String input) throws IPAddressNotFoundException {
         // Capture the ip-address after 'x byes from'
         Pattern p = Pattern.compile("bytes\\s+from\\s+([\\d,\\.]+):");
         Matcher m = p.matcher(input);
         if (m.find()){
             int i = 0;
-            String[] s = new  String[10];
+            List<String> list = new LinkedList<>();
             while(m.find()){
-                s[i] = m.group(++i);
+                list.add(m.group(1));
             }
-            return s;
+            return list;
         }
         else
             throw new IPAddressNotFoundException();
     }
 
-    // Doesn't work...
-    public static String[] parseIndividualICMP(String input) throws ICMPNotFoundException {
+    // Works!
+    public static List<String> parseIndividualICMP(String input) throws ICMPNotFoundException {
         // Capture the icmp sequence after the individual ip-address
         Pattern p = Pattern.compile("icmp_seq=(\\d+)\\s+ttl");
         Matcher m = p.matcher(input);
         if (m.find()){
             int i = 0;
-            String[] s = new  String[10];
+            List<String> list = new LinkedList<>();
             while(m.find()){
-                s[i] = m.group(++i);
+                list.add(m.group(1));
             }
-            return s;
+            return list;
         }
         else
             throw new ICMPNotFoundException();
     }
 
-    // Doesn't work..
-    public static String[] parseIndividualTTL(String input) throws TTLNotFoundException {
+    // Works!
+    public static List<String> parseIndividualTTL(String input) throws TTLNotFoundException {
         // Capture the individual ttl after the icmp sequence
         Pattern p = Pattern.compile("ttl=(\\d+)\\s+");
         Matcher m = p.matcher(input);
         if (m.find()){
             int i = 0;
-            String[] s = new  String[10];
+            List<String> list = new LinkedList<>();
             while(m.find()){
-                s[i] = m.group(++i);
+                list.add(m.group(1));
             }
-            return s;
+            return list;
         }
         else
             throw new TTLNotFoundException();
     }
 
-    // Doesn't work...
-    public static String[] parseIndividualTime(String input) throws TimeNotFoundException {
+    // Works!
+    public static List<String> parseIndividualTime(String input) throws TimeNotFoundException {
         // Capture the individual time after ttl
         Pattern p = Pattern.compile("time=(\\d+)\\s+ms");
         Matcher m = p.matcher(input);
         if (m.find()){
             int i = 0;
-            String[] s = new  String[10];
+            List<String> list = new LinkedList<>();
             while(m.find()){
-                s[i] = m.group(++i);
+                list.add(m.group(1));
             }
-            return s;
+            return list;
         }
         else
             throw new TimeNotFoundException();
@@ -234,7 +236,7 @@ public class RegexMatches
     // No error but all values null
     public static String[] parsePingStatisticsMinAvgMaxMdev(String input) throws TimeNotFoundException {
         // Capture the rtt min/avg/max/mdev times
-        Pattern p = Pattern.compile("rtt\\s+min/avg/max/mdev\\s+=\\s+([0-9]+\\.[0-9]+)/([0-9]+\\.[0-9]+)/([0-9]+\\.[0-9]+)/([0-9]+\\.[0-9]+)\\s+ms");
+        Pattern p = Pattern.compile("rtt\\s+min\\/avg\\/max\\/mdev\\s+=\\s+([0-9]+\\.[0-9]+)\\/([0-9]+\\.[0-9]+)\\/([0-9]+\\.[0-9]+)\\/([0-9]+\\.[0-9]+)\\s+ms");
         Matcher m = p.matcher(input);
         if (m.find()){
             int i = 0;

@@ -1,3 +1,5 @@
+package exceptions;
+
 /**
  * Created by Rohan Sampson on 6/3/2016.
  */

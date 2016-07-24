@@ -1,7 +1,11 @@
+package exceptions;
+
+import exceptions.RMException;
+
 /**
  * Created by Rohan Sampson on 6/3/2016.
  */
-public class ICMPNotFoundException extends RMException{
+public class ICMPNotFoundException extends RMException {
     public static void printMessage(){
         System.out.println("ICMP SEQUENCE ADDRESS NOT FOUND.");
     }

@@ -1,3 +1,7 @@
+package exceptions;
+
+import exceptions.RMException;
+
 /**
  * Created by Rohan Sampson on 6/3/2016.
  */
