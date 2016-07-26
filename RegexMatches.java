@@ -12,7 +12,7 @@ public class RegexMatches
         String input2 = "[1463895327]PING www.gov.bw (168.167.134.24) 100(128) bytes of data.[1463895327]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=1 ttl=110 time=868 ms[1463895328]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=2 ttl=110 time=892 ms[1463895329]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=3 ttl=110 time=814 ms[1463895330]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=4 ttl=110 time=1009 ms[1463895331]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=5 ttl=110 time=1006 ms[1463895332]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=6 ttl=110 time=984 ms[1463895333]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=7 ttl=110 time=1004 ms[1463895334]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=8 ttl=110 time=1006 ms[1463895335]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=9 ttl=110 time=1013 ms[1463895336]108 bytes from www.gov.bw (168.167.134.24): icmp_seq=10 ttl=110 time=578 ms[1463895336][1463895336]--- www.gov.bw ping statistics ---[1463895336]10 packets transmitted, 10 received, 0% packet loss, time 9007ms[1463895336]rtt min/avg/max/mdev = 578.263/917.875/1013.707/132.095 ms, pipe 2\n";
 //        System.out.println(parse1(input));
         try{
-            List<String> op  = parseIndividualTime(input);
+            List<String> op  = parseIndividualTime(input2);
             op.forEach(System.out::println);
         }
         catch (Exception e){
@@ -170,19 +170,22 @@ public class RegexMatches
 
     // Doesn't work...
     // No match found
-    public static String[] parsePingStatisticsTimestamps(String input) throws TimeStampNotFoundException {
+    public static List<String> parsePingStatisticsTimestamps(String input) throws TimeStampNotFoundException {
         //  Capture the first [unix-timestamp] mentioned in the ping statistics after 'ping statistics ---'
         //  Capture the second [unix-timestamp] mentioned in the ping statistics before 'rtt'
         Pattern p1 = Pattern.compile("ping\\s+statistics\\s+[\\-]+\\[([0-9]{10})\\]");
-        Matcher m1 = p1.matcher(input);
         Pattern p2 = Pattern.compile("ms\\[([0-9]{10})\\]");
         Matcher m2 = p2.matcher(input);
         String[] PSTimestamps = new String[2];
 
-        if(m1.find() || m2.find()){
-            PSTimestamps[0] = m1.group(1);
-            PSTimestamps[1] = m2.group(1);
-            return PSTimestamps;
+        Matcher m1 = p1.matcher(input);
+        if (m1.find()){
+            int i = 0;
+            List<String> list = new LinkedList<>();
+            while(m1.find()){
+                list.add(m1.group(1));
+            }
+            return list;
         }
         else
             throw new TimeStampNotFoundException();
